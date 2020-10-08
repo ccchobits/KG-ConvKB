@@ -67,7 +67,7 @@ class ConvKB(nn.Module):
 
     def get_regularization(self):
         penalty = 0
-        for embed in self.all_embeddings:
-            penalty += torch.sum(embed.weight ** 2)
-        return penalty / self.num_batch
+        for param in self.all_params:
+            penalty += torch.sum(param.weight.data ** 2) / 2.
+        return penalty 
 
