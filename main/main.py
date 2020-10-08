@@ -6,7 +6,7 @@ import numpy as np
 import torch
 import pandas as pd
 
-from models.model_ConvKG import ConvKG
+from models.model_ConvKB import ConvKB
 from utils.reader import Reader
 from utils.writer import Writer
 from utils.logger import Logger
@@ -36,12 +36,12 @@ parser.add_argument("--bern", type=bool_parser, default=False,
 parser.add_argument("--margin", type=float, default=1.0)
 parser.add_argument("--norm", type=int, default=2, help="[1 | 2]")
 parser.add_argument("--log", type=bool_parser, default=True, help="logging or not")
-parser.add_argument("--model", type=str, default="SME", help="The model for training")
+parser.add_argument("--model", type=str, default="ConvKB", help="The model for training")
 parser.add_argument("--loss", type=str, default="margin", help="loss function")
 parser.add_argument("--hidden", type=int, default=100, help="hidden layer")
 parser.add_argument("--neg_ratio", type=int, default=1, help="the ratio between the number of negative and positive samples")
 parser.add_argument("--reg", type=float, default=0., help="The coefficient for regularization")
-parser.add_argument("--n_filter", type=float, default=10, help="number of filters")
+parser.add_argument("--n_filter", type=int, default=10, help="number of filters")
 parser.add_argument("--kernel", type=int, default=1, help="number of kernel")
 parser.add_argument("--dropout", type=float, default=0., help="number of filters")
 configs = parser.parse_args()
@@ -80,7 +80,7 @@ n_rel = reader.n_rel
 ### create model and optimizer
 if configs.debug:
     print("start building model...", flush=True)
-model = ConvKG(n_ent, n_rel, dim, n_filter, kernel, reg, p).to(device)
+model = ConvKB(n_ent, n_rel, dim, n_filter, kernel, reg, p).to(device)
 if configs.debug:
     print("built model: ", flush=True)
     print(model, flush=True)

@@ -5,9 +5,9 @@ import torch.nn.functional as F
 device = torch.device("cuda")
 
 
-class ConvKG(nn.Module):
+class ConvKB(nn.Module):
     def __init__(self, n_ent, n_rel, depth, n_filter, kernel, reg, p):
-        super(ConvKG, self).__init__()
+        super(ConvKB, self).__init__()
 
         self.depth = depth
         self.n_filter = n_filter
