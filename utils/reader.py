@@ -55,12 +55,16 @@ class Reader:
         stat = np.empty((self.n_rel, 2))
         train_data_for_stat = pd.DataFrame(self.train_data, columns=["head", "tail", "relation"])
         for relation in range(self.n_rel):
+            triple_count = len(train_data_for_stat[train_data_for_stat["relation"] == relation])
             head_count = len(
                 train_data_for_stat[train_data_for_stat["relation"] == relation][["head"]].groupby(by=["head"]))
             tail_count = len(
                 train_data_for_stat[train_data_for_stat["relation"] == relation][["tail"]].groupby(by=["tail"]))
-            stat[relation] = np.array([head_count / (head_count + tail_count), tail_count / (head_count + tail_count)])
+            tph = triple_count / head_count
+            hpt = triple_count / tail_count
+            stat[relation] = np.array([tph / (tph + hpt), hpt / (tph + hpt)])
         return stat
+
 
     def shuffle(self):
         np.random.permutation(self.indices)
@@ -84,9 +88,9 @@ class Reader:
             rand = np.random.random(size)
             for i in range(size):
                 if rand[i] < self.stat[pos_samples[i][2]][0]:
-                    head_or_tail[i] = 1
-                else:
                     head_or_tail[i] = 0
+                else:
+                    head_or_tail[i] = 1
         else:
             head_or_tail = np.random.randint(low=0, high=2, size=(size,))
         neg_samples = np.copy(pos_samples)

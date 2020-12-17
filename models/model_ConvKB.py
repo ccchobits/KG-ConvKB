@@ -18,7 +18,7 @@ class ConvKB(nn.Module):
         self.conv_layer = nn.Conv1d(3, n_filter, kernel_size=kernel)
         self.conv2_bn = nn.BatchNorm1d(n_filter)
         self.dropout = nn.Dropout(p)
-        self.w = nn.Linear((n_filter - kernel + 1) * depth, 1, bias=False)
+        self.w = nn.Linear((depth - kernel + 1) * n_filter, 1, bias=False)
         self.all_params = [self.ent_embedding, self.rel_embedding, self.conv_layer, self.w]
 
     def initialize(self):
